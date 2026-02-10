@@ -407,6 +407,8 @@ int flb_oauth2_parse_json_response(const char *json_data, size_t json_size,
     ctx->expires_in = expires_in;
     ctx->expires_at = time(NULL) + expires_in;
 
+    flb_info("[oauth2] access token obtained: %s", ctx->access_token);
+
     return 0;
 }
 
