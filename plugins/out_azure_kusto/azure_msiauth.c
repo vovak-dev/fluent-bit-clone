@@ -135,7 +135,9 @@ static flb_sds_t read_token_from_file(const char *token_file)
     return token;
 }
 
-int flb_azure_workload_identity_token_get(struct flb_oauth2 *ctx, const char *token_file, const char *client_id, const char *tenant_id)
+int flb_azure_workload_identity_token_get(struct flb_oauth2 *ctx, const char *token_file,
+                                          const char *client_id, const char *tenant_id,
+                                          const char *scope)
 {
     int ret;
     size_t b_sent;
@@ -175,8 +177,9 @@ int flb_azure_workload_identity_token_get(struct flb_oauth2 *ctx, const char *to
     body = flb_sds_cat(body, "&client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer", 77);
     body = flb_sds_cat(body, "&client_assertion=", 18);
     body = flb_sds_cat(body, federated_token, flb_sds_len(federated_token));
-    /* Use the correct scope and length for Kusto */
-    body = flb_sds_cat(body, "&scope=https://help.kusto.windows.net/.default", 46);
+    /* Use the cloud-specific scope for Kusto */
+    body = flb_sds_cat(body, "&scope=", 7);
+    body = flb_sds_cat(body, scope, strlen(scope));
 
     if (!body) {
         /* This check might be redundant if flb_sds_cat handles errors, but safe */
