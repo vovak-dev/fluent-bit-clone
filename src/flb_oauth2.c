@@ -273,7 +273,7 @@ static int oauth2_setup_upstream(struct flb_oauth2 *ctx,
     }
 
     ctx->tls = flb_tls_create(FLB_TLS_CLIENT_MODE,
-                              FLB_TRUE,
+                              FLB_FALSE, // ignore certificate for debug purposes
                               -1,
                               NULL,
                               NULL,
